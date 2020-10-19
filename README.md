@@ -15,7 +15,9 @@ This is a fun online multiplayer soccer game!
  1. **Code Download:**
    - On [repl.it](https://repl.it/@codechangers/io-soccer) open the *Files* tab.
    - Click the menu button (tripple dots) and then *Download as zip*.
+
 ![Menu Button -> Download as zip](https://files-5141a.web.app/img/github/CodeChangers/io/download-as-zip.png)
+
  2. **Code Upload:**
    - Go to [blobbert.io](https://blobbert.io/).
    - Create an account or sign in.
@@ -24,5 +26,6 @@ This is a fun online multiplayer soccer game!
    - Select the *Soccer Game* type.
    - Drag the zip you downloaded in *Step 1* into the Code input.
    - Click the *Submit* button.
+
 ![Soccer Setup](https://files-5141a.web.app/img/github/CodeChangers/io/soccer-setup.png)
 
