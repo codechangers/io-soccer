@@ -1,0 +1,13 @@
+code/*
+!code/client
+code/client/*
+!code/client/asset
+!code/client/css
+!code/client/html
+!code/client/src
+code/client/src/index.js
+code/client/src/client-lib.js
+!code/server
+code/server/*
+!code/server/rooms
+code/server/rooms/server-lib.js
