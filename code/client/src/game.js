@@ -42,12 +42,16 @@ module.exports = class Game extends Phaser.Scene {
     g.drawBackground('grass');
     g.getCharacters(
       'players',
-      (player, data) => {
+      (player) => {
         player.sprite.setScale(0.5);
-        if (player.id == data.id) {
+        g.handleLeaderboard('players', 'SCOREBOARD');
+        if (player.id == g.myId()) {
           g.cameraFollow(player.sprite);
         }
-      } // On Add
+      }, // On Add
+      () => {
+        g.handleLeaderboard('players', 'SCOREBOARD');
+      } // On Remove
     );
   }
 
