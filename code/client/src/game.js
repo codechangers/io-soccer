@@ -32,7 +32,12 @@ module.exports = class Game extends Phaser.Scene {
   }
 
   create() {
-    g.connect();
+    g.useLoginScreen(
+      (name) => g.connect({ name }),
+      'SUPER SOCCER',
+      'USERNAME',
+      'PLAY NOW'
+    );
     g.setupKeys(keys);
     g.drawBackground('grass');
     g.getCharacters(
