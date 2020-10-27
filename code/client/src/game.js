@@ -35,7 +35,7 @@ module.exports = class Game extends Phaser.Scene {
 
   create() {
     g.useLoginScreen(
-      (name) => g.connect({ name }),
+      (name) => g.connect({ name, gameOver: false }),
       'SUPER SOCCER',
       'USERNAME',
       'PLAY NOW'
@@ -52,7 +52,13 @@ module.exports = class Game extends Phaser.Scene {
       }, // On Add
       () => {
         g.handleLeaderboard('players', 'SCOREBOARD');
-      } // On Remove
+      }, // On Remove
+      (id, attr, value) => {
+        console.log('Update', id, attr, value);
+        if (id === g.myId() && attr === 'gameOver' && value) {
+          window.location.reload();
+        }
+      } // On Update
     );
     g.getCharacters('badGuys');
   }

@@ -34,8 +34,8 @@ module.exports = class MyRoom extends Room {
   }
 
   onUpdate() {
-    g.handleCircleOnBoxCollision('players', 'badGuys', (r) => {
-      console.log('We collided!!!', r);
+    g.handleCircleOnBoxCollision('players', 'badGuys', (player) => {
+      player.gameOver = true;
     });
   }
 
