@@ -22,14 +22,14 @@ module.exports = class Game extends Phaser.Scene {
   init() {
     g.setup(this);
     g.addCharacters('players', 0.5);
-    g.addCharacters('badGuys', 1);
+    g.addCharacters('badGuys');
     g.setSize(2100, 2100);
     g.cameraBounds();
   }
 
   preload() {
-    g.loadImage('players', 'characters/circle1.png');
-    g.loadImage('badGuys', 'characters/circle2.png');
+    g.loadImage('players', 'characters/circle2.png');
+    g.loadImage('badGuys', 'characters/circle1.png');
     g.loadImage('grass', 'grass.jpg');
   }
 
@@ -54,11 +54,10 @@ module.exports = class Game extends Phaser.Scene {
         g.handleLeaderboard('players', 'SCOREBOARD');
       }, // On Remove
       (id, attr, value) => {
-        console.log('Update', id, attr, value);
         if (id === g.myId() && attr === 'gameOver' && value) {
-          window.location.reload();
+          location.reload();
         }
-      } // On Update
+      }
     );
     g.getCharacters('badGuys');
   }
