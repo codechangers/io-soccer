@@ -8,11 +8,12 @@
     <%= htmlWebpackPlugin.options.livereloadScript %>
   </head>
   <body>
-    <div id="input-overlay">
+    <div id="input-overlay" class="hide">
+      <form class="login hide"></form>
+      <div class="store hide"></div>
     </div>
     <div id="game-overlay">
-      <div class="leaderboard">
-      </div>
+      <div class="leaderboard"></div>
     </div>
     <div id="phaser-example"></div>
   </body>

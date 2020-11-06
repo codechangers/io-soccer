@@ -5,13 +5,9 @@ const g = new ServerLib();
 module.exports = class MyRoom extends Room {
   onInit() {
     g.setup(this);
-    g.setupCharacters('players', 'box');
-    g.setupCharacters('badGuys', 'circle');
-    g.useBarrier('players', 'badGuys');
-    g.createACharacter('badGuys', g.nextCharacterId('badGuys'), {
-      x: 500,
-      y: 500,
-    });
+    g.setupCharacters('players', 'circle');
+    g.setupCharacters('balls', 'circle');
+    g.createACharacter('balls', g.nextCharacterId('balls'), { x: 600, y: 600 });
     g.setBounds(2100, 2100);
   }
 
@@ -31,8 +27,17 @@ module.exports = class MyRoom extends Room {
       moveDown: () => g.move(player, 'y', speed),
       moveLeft: () => g.move(player, 'x', -speed),
       moveRight: () => g.move(player, 'x', speed),
+      buy3Block: () => g.purchase(player, 'score', 10, 'blocks3'),
+      buy5Block: () => g.purchase(player, 'score', 15, 'blocks5'),
     };
     g.handleActions(actions, data);
+  }
+
+  onUpdate() {
+    g.handleCollision('players', 'balls', (player, ball) => {
+      player.score += 100;
+      g.deleteACharacter('balls', ball.id);
+    });
   }
 
   onLeave(client) {
