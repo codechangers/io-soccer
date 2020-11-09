@@ -12,7 +12,6 @@ const keys = {
   down: keyCodes.DOWN,
   left: keyCodes.LEFT,
   right: keyCodes.RIGHT,
-  tab: keyCodes.TAB,
 };
 
 module.exports = class Game extends Phaser.Scene {
@@ -23,14 +22,16 @@ module.exports = class Game extends Phaser.Scene {
   init() {
     g.setup(this);
     g.addCharacters('players', 0.5);
-    g.addCharacters('balls', 0.25);
+    g.addLocations('safeZones', 2);
+    g.addLocations('scoreZones', 2);
     g.setSize(2100, 2100);
     g.cameraBounds();
   }
 
   preload() {
     g.loadImage('players', 'characters/circle1.png');
-    g.loadImage('balls', 'ball.png');
+    g.loadImage('safeZones', 'blocks/block5.png');
+    g.loadImage('scoreZones', 'blocks/block3.png');
     g.loadImage('grass', 'grass.jpg');
   }
 
@@ -41,47 +42,36 @@ module.exports = class Game extends Phaser.Scene {
       'USERNAME',
       'PLAY NOW'
     );
-    g.useStore('Supa Store', [
-      new g.StoreItem(
-        'blocks/block3.png',
-        'LVL 3 Block',
-        'Points',
-        10,
-        'buy3Block'
-      ),
-      new g.StoreItem(
-        'blocks/block5.png',
-        'LVL 5 Block',
-        'Points',
-        15,
-        'buy5Block'
-      ),
-    ]);
     g.setupKeys(keys);
     g.drawBackground('grass');
     g.getCharacters(
       'players',
       (player) => {
+        player.sprite.depth = 1;
         g.handleLeaderboard('players', 'SCOREBOARD');
         if (player.id == g.myId()) {
           g.cameraFollow(player.sprite);
         }
       }, // On Add
       () => g.handleLeaderboard('players', 'SCOREBOARD'), // On Remove
-      () => g.handleLeaderboard('players', 'SCOREBOARD') // On Update
+      (id, attr, value) => {
+        g.handleLeaderboard('players', 'SCOREBOARD');
+        if (attr == 'rotation') {
+          this.players[id].sprite.rotation = value;
+        }
+      } // On Update
     );
-    g.getCharacters('balls');
+    g.getLocations('safeZones');
+    g.getLocations('scoreZones');
   }
 
   update() {
     if (g.canSend()) {
-      const { up, down, left, right, w, a, s, d, tab } = g.getKeysDown();
+      const { up, down, left, right, w, a, s, d } = g.getKeysDown();
       if (up || w) g.sendAction('moveUp');
       if (down || s) g.sendAction('moveDown');
       if (left || a) g.sendAction('moveLeft');
       if (right || d) g.sendAction('moveRight');
-      if (tab) g.toggleStore();
-      else g.unlockStore();
     }
   }
 };

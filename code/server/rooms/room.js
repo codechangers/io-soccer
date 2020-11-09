@@ -6,8 +6,22 @@ module.exports = class MyRoom extends Room {
   onInit() {
     g.setup(this);
     g.setupCharacters('players', 'circle');
-    g.setupCharacters('balls', 'circle');
-    g.createACharacter('balls', g.nextCharacterId('balls'), { x: 600, y: 600 });
+    g.setupLocations('safeZones');
+    g.createALocation(
+      'safeZones',
+      g.nextLocationId('safeZones'),
+      { x: 500, y: 500 },
+      '0DCBB1',
+      (player) => (player.rotation = Math.PI)
+    );
+    g.setupLocations('scoreZones');
+    g.createALocation(
+      'scoreZones',
+      g.nextLocationId('scoreZones'),
+      { x: 1500, y: 700 },
+      '',
+      (player) => (player.score += 1)
+    );
     g.setBounds(2100, 2100);
   }
 
@@ -27,17 +41,14 @@ module.exports = class MyRoom extends Room {
       moveDown: () => g.move(player, 'y', speed),
       moveLeft: () => g.move(player, 'x', -speed),
       moveRight: () => g.move(player, 'x', speed),
-      buy3Block: () => g.purchase(player, 'score', 10, 'blocks3'),
-      buy5Block: () => g.purchase(player, 'score', 15, 'blocks5'),
     };
     g.handleActions(actions, data);
   }
 
   onUpdate() {
-    g.handleCollision('players', 'balls', (player, ball) => {
-      player.score += 100;
-      g.deleteACharacter('balls', ball.id);
-    });
+    Object.values(this.state.players).forEach((p) => (p.rotation = 0));
+    g.handleLocations('safeZones', 'players');
+    g.handleLocations('scoreZones', 'players');
   }
 
   onLeave(client) {
