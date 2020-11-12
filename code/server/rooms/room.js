@@ -7,6 +7,7 @@ module.exports = class MyRoom extends Room {
     g.setup(this);
     g.setupCharacters('players', 'circle');
     g.setupLocations('safeZones');
+    g.setupResources('balls');
     g.createALocation(
       'safeZones',
       g.nextLocationId('safeZones'),
@@ -23,6 +24,7 @@ module.exports = class MyRoom extends Room {
       (player) => (player.score += 1)
     );
     g.setBounds(2100, 2100);
+    g.createAResource('balls', 600, 600);
   }
 
   onJoin(client, data) {
@@ -30,6 +32,14 @@ module.exports = class MyRoom extends Room {
       x: 200,
       y: 200,
       ...data,
+    });
+    g.attachTo('players', client.sessionId, {
+      name: 'blockItem',
+      x: 50,
+      y: 50,
+      type: 'item',
+      image: 'blockItem',
+      scale: 0.25,
     });
   }
 
@@ -49,6 +59,7 @@ module.exports = class MyRoom extends Room {
     Object.values(this.state.players).forEach((p) => (p.rotation = 0));
     g.handleLocations('safeZones', 'players');
     g.handleLocations('scoreZones', 'players');
+    g.follow('players', 'balls', 100, 0.2);
   }
 
   onLeave(client) {

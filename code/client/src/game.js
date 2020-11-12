@@ -24,6 +24,7 @@ module.exports = class Game extends Phaser.Scene {
     g.addCharacters('players', 0.5);
     g.addLocations('safeZones', 2);
     g.addLocations('scoreZones', 2);
+    g.addResources('balls');
     g.setSize(2100, 2100);
     g.cameraBounds();
   }
@@ -33,11 +34,13 @@ module.exports = class Game extends Phaser.Scene {
     g.loadImage('safeZones', 'blocks/block5.png');
     g.loadImage('scoreZones', 'blocks/block3.png');
     g.loadImage('grass', 'grass.jpg');
+    g.loadImage('balls', 'ball.png');
+    g.loadImage('blockItem', 'blocks/block-blank3.png');
   }
 
   create() {
     g.useLoginScreen(
-      (name) => g.connect({ name, score: 0 }),
+      (name) => g.connect({ name, score: 0, attached: { blockItem: null } }),
       'SUPER SOCCER',
       'USERNAME',
       'PLAY NOW'
@@ -63,6 +66,7 @@ module.exports = class Game extends Phaser.Scene {
     );
     g.getLocations('safeZones');
     g.getLocations('scoreZones');
+    g.getResources('balls', (ball) => ball.sprite.setScale(0.25));
   }
 
   update() {
