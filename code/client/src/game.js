@@ -12,6 +12,9 @@ const keys = {
   down: keyCodes.DOWN,
   left: keyCodes.LEFT,
   right: keyCodes.RIGHT,
+  one: keyCodes.ONE,
+  two: keyCodes.TWO,
+  three: keyCodes.THREE,
 };
 
 module.exports = class Game extends Phaser.Scene {
@@ -22,6 +25,7 @@ module.exports = class Game extends Phaser.Scene {
   init() {
     g.setup(this);
     g.addCharacters('players', 0.5);
+    g.addCharacters('item2', 0.25);
     g.addLocations('safeZones', 2);
     g.addLocations('scoreZones', 2);
     g.addResources('balls');
@@ -36,15 +40,25 @@ module.exports = class Game extends Phaser.Scene {
     g.loadImage('grass', 'grass.jpg');
     g.loadImage('balls', 'ball.png');
     g.loadImage('blockItem', 'blocks/block-blank3.png');
+    g.loadImage('item2', 'blocks/block-blank5.png');
   }
 
   create() {
     g.useLoginScreen(
-      (name) => g.connect({ name, score: 0, attached: { blockItem: null } }),
+      (name) =>
+        g.connect({
+          name,
+          score: 0,
+          attached: { blockItem: null, item2: null },
+          items: {},
+          rotation: 0,
+          animations: {},
+        }),
       'SUPER SOCCER',
       'USERNAME',
       'PLAY NOW'
     );
+    g.useItemBar(3);
     g.setupKeys(keys);
     g.drawBackground('grass');
     g.getCharacters(
@@ -55,6 +69,7 @@ module.exports = class Game extends Phaser.Scene {
         if (player.id == g.myId()) {
           g.cameraFollow(player.sprite);
         }
+        player.sprite.rotation = player.rotation;
       }, // On Add
       () => g.handleLeaderboard('players', 'SCOREBOARD'), // On Remove
       (id, attr, value) => {
@@ -64,6 +79,16 @@ module.exports = class Game extends Phaser.Scene {
         }
       } // On Update
     );
+    g.getCharacters(
+      'item2',
+      () => {},
+      () => {},
+      (id, attr, value) => {
+        if (attr == 'rotation') {
+          this.item2[id].rotation = value;
+        }
+      }
+    );
     g.getLocations('safeZones');
     g.getLocations('scoreZones');
     g.getResources('balls', (ball) => ball.sprite.setScale(0.25));
@@ -71,11 +96,32 @@ module.exports = class Game extends Phaser.Scene {
 
   update() {
     if (g.canSend()) {
-      const { up, down, left, right, w, a, s, d } = g.getKeysDown();
+      const {
+        up,
+        down,
+        left,
+        right,
+        w,
+        a,
+        s,
+        d,
+        one,
+        two,
+        three,
+      } = g.getKeysDown();
       if (up || w) g.sendAction('moveUp');
       if (down || s) g.sendAction('moveDown');
       if (left || a) g.sendAction('moveLeft');
       if (right || d) g.sendAction('moveRight');
+      if (one) g.sendAction('switchToItem1');
+      else if (two) g.sendAction('switchToItem2');
+      else if (three) g.sendAction('switchToItem3');
+    }
+  }
+
+  click(x, y) {
+    if (g.canSend()) {
+      g.sendAction('useItem', { x, y });
     }
   }
 };

@@ -6,6 +6,7 @@ module.exports = class MyRoom extends Room {
   onInit() {
     g.setup(this);
     g.setupCharacters('players', 'circle');
+    g.setupCharacters('item2');
     g.setupLocations('safeZones');
     g.setupResources('balls');
     g.createALocation(
@@ -13,7 +14,7 @@ module.exports = class MyRoom extends Room {
       g.nextLocationId('safeZones'),
       { x: 500, y: 500 },
       '0DCBB1',
-      (player) => (player.rotation = Math.PI)
+      (player) => g.playAnimation(player, 'rotation', 1, 1000)
     );
     g.setupLocations('scoreZones');
     g.createALocation(
@@ -25,6 +26,17 @@ module.exports = class MyRoom extends Room {
     );
     g.setBounds(2100, 2100);
     g.createAResource('balls', 600, 600);
+    g.createNewItem('blockItem', 'blocks/block-blank3.png', (a, b, swing) =>
+      swing()
+    );
+    g.createNewItem(
+      'item2',
+      'blocks/block-blank5.png',
+      (a, data, c, throwItem) => {
+        console.log(data);
+        throwItem(data.x, data.y);
+      }
+    );
   }
 
   onJoin(client, data) {
@@ -33,14 +45,11 @@ module.exports = class MyRoom extends Room {
       y: 200,
       ...data,
     });
-    g.attachTo('players', client.sessionId, {
-      name: 'blockItem',
-      x: 50,
-      y: 50,
-      type: 'item',
-      image: 'blockItem',
-      scale: 0.25,
-    });
+    g.addItemToCharacter(
+      g.getACharacter('players', client.sessionId),
+      'blockItem'
+    );
+    g.addItemToCharacter(g.getACharacter('players', client.sessionId), 'item2');
   }
 
   onMessage(client, data) {
@@ -51,15 +60,46 @@ module.exports = class MyRoom extends Room {
       moveDown: () => g.move(player, 'y', speed),
       moveLeft: () => g.move(player, 'x', -speed),
       moveRight: () => g.move(player, 'x', speed),
+      useItem: () => g.useItem(player, data),
+      switchToItem1: () => {
+        g.attachTo('players', client.sessionId, {
+          item: g.getItem('blockItem'),
+          x: 100,
+          y: 100,
+          scale: 0.5,
+        });
+        g.unAttach('players', client.sessionId, 'item2');
+        g.switchItem(player, 0);
+      },
+      switchToItem2: () => {
+        g.attachTo('players', client.sessionId, {
+          item: g.getItem('item2'),
+          x: 80,
+          y: 80,
+          scale: 0.25,
+        });
+        g.unAttach('players', client.sessionId, 'blockItem');
+        g.switchItem(player, 1);
+      },
+      switchToItem3: () => {
+        g.unAttach('players', client.sessionId, 'blockItem');
+        g.unAttach('players', client.sessionId, 'item2');
+        g.switchItem(player, 2);
+      },
     };
     g.handleActions(actions, data);
   }
 
   onUpdate() {
-    Object.values(this.state.players).forEach((p) => (p.rotation = 0));
     g.handleLocations('safeZones', 'players');
     g.handleLocations('scoreZones', 'players');
     g.follow('players', 'balls', 100, 0.2);
+    g.handleAnimations('players');
+    g.handleAnimations('item2');
+    g.handleItemCollision('players', 'blockItem', 'balls', (item, ball) => {
+      console.log('hit');
+      g.deleteAResource('balls', ball.id);
+    });
   }
 
   onLeave(client) {
