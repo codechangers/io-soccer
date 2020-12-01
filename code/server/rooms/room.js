@@ -1,5 +1,6 @@
-const Room = require('colyseus').Room;
+const { Room } = require('colyseus');
 const ServerLib = require('../../../../../src/server');
+
 const g = new ServerLib();
 
 module.exports = class MyRoom extends Room {
@@ -22,19 +23,23 @@ module.exports = class MyRoom extends Room {
       g.nextLocationId('scoreZones'),
       { x: 1500, y: 700 },
       '',
-      (player) => (player.score += 1)
+      (player) => {
+        player.score += 1;
+      }
     );
     g.setBounds(2100, 2100);
     g.createAResource('balls', 600, 600);
-    g.createNewItem('blockItem', 'blocks/block-blank3.png', (a, b, swing) =>
-      swing()
+    g.createNewItem(
+      'blockItem',
+      'blocks/block-blank3.png',
+      (char, data, actions) => actions.swingItem()
     );
     g.createNewItem(
       'item2',
       'blocks/block-blank5.png',
-      (a, data, c, throwItem) => {
+      (char, data, actions) => {
         console.log(data);
-        throwItem(data.x, data.y);
+        actions.throwItem(data.x, data.y);
       }
     );
   }
