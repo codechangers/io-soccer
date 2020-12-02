@@ -71,7 +71,7 @@ module.exports = class MyRoom extends Room {
           item: g.getItem('blockItem'),
           x: 100,
           y: 100,
-          scale: 0.5,
+          scale: 0.25,
         });
         g.unAttach('players', client.sessionId, 'item2');
         g.switchItem(player, 0);

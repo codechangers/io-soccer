@@ -1,5 +1,6 @@
 const Phaser = require('phaser');
 const ClientLib = require('../../../../../src/client');
+
 const g = new ClientLib();
 
 const keyCodes = Phaser.Input.Keyboard.KeyCodes;
@@ -66,7 +67,7 @@ module.exports = class Game extends Phaser.Scene {
       (player) => {
         player.sprite.depth = 1;
         g.handleLeaderboard('players', 'SCOREBOARD');
-        if (player.id == g.myId()) {
+        if (player.id === g.myId()) {
           g.cameraFollow(player.sprite);
         }
         player.sprite.rotation = player.rotation;
@@ -74,7 +75,7 @@ module.exports = class Game extends Phaser.Scene {
       () => g.handleLeaderboard('players', 'SCOREBOARD'), // On Remove
       (id, attr, value) => {
         g.handleLeaderboard('players', 'SCOREBOARD');
-        if (attr == 'rotation') {
+        if (attr === 'rotation') {
           this.players[id].sprite.rotation = value;
         }
       } // On Update
@@ -84,7 +85,7 @@ module.exports = class Game extends Phaser.Scene {
       () => {},
       () => {},
       (id, attr, value) => {
-        if (attr == 'rotation') {
+        if (attr === 'rotation') {
           this.item2[id].rotation = value;
         }
       }
