@@ -42,13 +42,19 @@ module.exports = class Game extends Phaser.Scene {
     g.loadImage('balls', 'ball.png');
     g.loadImage('blockItem', 'blocks/block-blank3.png');
     g.loadImage('item2', 'blocks/block-blank5.png');
+    g.loadImage('blobbert', 'characters/circle1.png');
+    g.loadImage('grunch', 'characters/circle2.png');
+    g.loadImage('neon', 'characters/circle3.png');
+    g.loadImage('nimbo', 'characters/circle4.png');
+    g.loadImage('tangles', 'characters/circle5.png');
   }
 
   create() {
     g.useLoginScreen(
-      (name) =>
+      (name, spriteName) =>
         g.connect({
           name,
+          spriteName,
           score: 0,
           attached: { blockItem: null, item2: null },
           items: {},
@@ -59,6 +65,13 @@ module.exports = class Game extends Phaser.Scene {
       'USERNAME',
       'PLAY NOW'
     );
+    g.usePlayerSelectScreen({
+      blobbert: 'characters/circle1.png',
+      grunch: 'characters/circle2.png',
+      neon: 'characters/circle3.png',
+      nimbo: 'characters/circle4.png',
+      tangles: 'characters/circle5.png',
+    });
     g.useHowToScreen(
       'How to play',
       {
