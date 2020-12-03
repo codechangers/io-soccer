@@ -59,6 +59,22 @@ module.exports = class Game extends Phaser.Scene {
       'USERNAME',
       'PLAY NOW'
     );
+    g.useHowToScreen(
+      'How to play',
+      {
+        'Press [W] or [up arrow]': 'Move character up',
+        'Press [S] or [down arrow]': 'Move character down',
+        'Press [A] or [left arrow]': 'Move character left',
+        'Press [D] or [right arrow]': 'Move character right',
+        'Press [1]': 'Select block item',
+        'Press [2]': 'Select item2',
+        'Mouse Click': 'Use current item',
+      },
+      {
+        'Macuyler Dunn': 'Developer',
+        'Sydney Sneddon': 'Designer',
+      }
+    );
     g.useItemBar(3);
     g.setupKeys(keys);
     g.drawBackground('grass');
