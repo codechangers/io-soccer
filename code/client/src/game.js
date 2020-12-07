@@ -102,11 +102,8 @@ module.exports = class Game extends Phaser.Scene {
         player.sprite.rotation = player.rotation;
       }, // On Add
       () => g.handleLeaderboard('players', 'SCOREBOARD'), // On Remove
-      (id, attr, value) => {
+      () => {
         g.handleLeaderboard('players', 'SCOREBOARD');
-        if (attr === 'rotation') {
-          this.players[id].sprite.rotation = value;
-        }
       } // On Update
     );
     g.getCharacters(
