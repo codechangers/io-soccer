@@ -69,8 +69,8 @@ module.exports = class MyRoom extends Room {
       switchToItem1: () => {
         g.attachTo('players', client.sessionId, {
           item: g.getItem('blockItem'),
-          x: 100,
-          y: 100,
+          x: 40,
+          y: 40,
           scale: 0.25,
         });
         g.unAttach('players', client.sessionId, 'item2');
@@ -79,8 +79,8 @@ module.exports = class MyRoom extends Room {
       switchToItem2: () => {
         g.attachTo('players', client.sessionId, {
           item: g.getItem('item2'),
-          x: 80,
-          y: 80,
+          x: 40,
+          y: 40,
           scale: 0.25,
         });
         g.unAttach('players', client.sessionId, 'blockItem');
