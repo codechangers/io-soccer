@@ -98,7 +98,9 @@ module.exports = class MyRoom extends Room {
   onUpdate() {
     g.handleLocations('safeZones', 'players');
     g.handleLocations('scoreZones', 'players');
-    g.follow('players', 'balls', 100, 0.2);
+    g.follow('players', 'balls', 100, 0.2, (player, ball) => {
+      ball.rotation = g.getRotationTowards(ball, player.x, player.y);
+    });
     g.handleAnimations('players');
     g.handleAnimations('item2');
     g.handleItemCollision('players', 'blockItem', 'balls', (item, ball) => {
