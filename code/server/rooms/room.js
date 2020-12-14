@@ -3,6 +3,8 @@ const ServerLib = require('../../../../../src/server');
 
 const g = new ServerLib();
 
+const sprites = ['blobbert', 'grunch', 'neon', 'nimbo', 'tangles'];
+
 module.exports = class MyRoom extends Room {
   onInit() {
     g.setup(this);
@@ -21,8 +23,8 @@ module.exports = class MyRoom extends Room {
     g.createALocation(
       'scoreZones',
       g.nextLocationId('scoreZones'),
-      { x: 1500, y: 700 },
-      '',
+      { x: 1500, y: 700, width: 300, height: 300 },
+      '0000ff',
       (player) => {
         player.score += 1;
       }
@@ -106,6 +108,9 @@ module.exports = class MyRoom extends Room {
     g.handleItemCollision('players', 'blockItem', 'balls', (item, ball) => {
       console.log('hit');
       g.deleteAResource('balls', ball.id);
+    });
+    g.getAllCharacters('players', (player, i) => {
+      player.spriteName = sprites[i % sprites.length];
     });
   }
 

@@ -37,7 +37,6 @@ module.exports = class Game extends Phaser.Scene {
   preload() {
     g.loadImage('players', 'characters/circle1.png');
     g.loadImage('safeZones', 'blocks/block5.png');
-    g.loadImage('scoreZones', 'blocks/block3.png');
     g.loadImage('grass', 'grass.jpg');
     g.loadImage('balls', 'ball.png');
     g.loadImage('blockItem', 'blocks/block-blank3.png');
